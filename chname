@@ -1,0 +1,104 @@
+#!/bin/sh
+
+# List of parameters
+
+RECURSIVE=0
+SUBDIRECTORIES=0
+LOWERCASE=0
+UPPERCASE=0
+LIST_OF_FILE=""
+
+INPUT=""
+OUTPUT=""
+
+INIT_DIR=$(pwd)
+
+help_msg(){
+    echo "Usage: script_name [OPTIONS] [FILENAMES]"
+
+    echo "Options:"
+    echo "  -r, --recursive            Process directories recursively."
+    echo "  -s, --subdirectories       Process subdirectories as well."
+    echo "  -l, --lowercase            Convert filenames to lowercase."
+    echo "  -u, --uppercase            Convert filenames to uppercase."
+    echo "  -h, --help                 Display this help message."
+
+    echo "Example:"
+    echo "  script_name -r -l file1.txt directory1"
+}
+
+to_upper(){
+    OUTPUT=$(echo $1 | tr '[:lower:]' '[:upper:]')
+}
+
+to_lower(){
+    OUTPUT=$(echo $1 | tr '[:upper:]' '[:lower:]')
+}
+
+get_args(){
+    case "$1" in
+        -r|--recursive) RECURSIVE=1;;
+        -s|--subdirectories) SUBDIRECTORIES=1;;
+        -l|--lowercase) LOWERCASE=1;;
+        -u|--uppercase) UPPERCASE=1;;
+        -h|--help) help_msg && exit;;
+        *) LIST_OF_FILE="$1 $LIST_OF_FILE"
+    esac
+}
+
+change_name(){
+    FILEPATH=""
+    if [[ "$INPUT" == *\/* ]];then
+        # If the name contains "/" for example folder/subfolder/file
+        FILEPATH="$(echo $INPUT | sed 's:/[^/]*$::')/"
+        INPUT=$(echo $INPUT | sed 's:.*/::')
+    fi
+    if [ $UPPERCASE -eq 1 ];then
+        to_upper $INPUT
+    else
+        to_lower $INPUT
+    fi
+    INPUT=$FILEPATH$INPUT
+    OUTPUT=$FILEPATH$OUTPUT
+}
+
+main_func(){
+local PREV_DIR=$(pwd)
+while test "x$1" != "x";do 
+    if [ -d $1 ]; then
+        if [ $RECURSIVE -eq 1 ];then
+            cd $1
+            main_func $(ls)
+            cd $PREV_DIR
+        fi
+        if [ $SUBDIRECTORIES -eq 1 ];then
+            INPUT=$1
+            change_name
+            mv $INPUT $OUTPUT 2>/dev/null
+        fi
+    else
+        INPUT=$1
+        change_name
+        mv $INPUT $OUTPUT 2>/dev/null
+    fi
+    shift
+done
+}
+
+while test "x$1" != "x";do
+    get_args $1
+    shift
+done
+
+if [[ $UPPERCASE -eq 1 && $LOWERCASE -eq 1 ]];then
+    echo "ERROR : CAN'T LOWERCASE AND UPPERCASE"
+    exit
+fi  
+if [[ $UPPERCASE -eq 0 && $LOWERCASE -eq 0 ]];then
+    echo "ERROR : CAN'T DO NOTHING"
+    exit
+fi  
+
+
+main_func $LIST_OF_FILE
+cd $INIT_DIR

@@ -1,0 +1,47 @@
+#!/bin/sh
+
+R='\033[0;31m'   #'0;31' is Red's ANSI color code
+G='\033[0;32m'   #'0;32' is Green's ANSI color code
+Y='\033[1;32m'   #'1;32' is Yellow's ANSI color code
+B='\033[0;34m'   #'0;34' is Blue's ANSI color code
+NOCOLOR='\033[0m'
+
+reset_test_folder(){
+FILETODELETE=$(ls | grep -v "chname*")
+rm -r $FILETODELETE
+
+touch file_root
+mkdir -p folder/subFOlder
+touch folder/file1
+touch folder/subFOlder/FILE2
+touch folder/subFOlder/file3
+}
+
+reset_test_folder
+echo "Architecture of test :"
+echo -e "├── folder
+│   ├── file1
+│   └── subFOlder
+│       ├── FILE2
+│       └── file3
+└── file_root\n\n"
+
+testing(){
+echo -e "${R}Testing :${B} $1${NOCOLOR}"
+$1
+echo "result of ls -R:"
+ls --color=tty -R 
+reset_test_folder
+echo _______________________________________________________________
+}
+
+testing "./chname -h"
+testing "./chname -u file_root"
+testing "./chname -l folder/subFOlder/FILE2"
+testing "./chname -u -r folder"
+testing "./chname -u -r -s folder"
+testing "./chname -u -s folder/subFOlder"
+testing "./chname -u -r folder file_root"
+testing "./chname -u -s -r folder file_root"
+testing "./chname -u -s -r folder/*"
+
