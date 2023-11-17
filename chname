@@ -14,6 +14,7 @@ OUTPUT=""
 INIT_DIR=$(pwd)
 
 help_msg(){
+    # Print the following help message
     echo "Usage: script_name [OPTIONS] [FILENAMES]"
 
     echo "Options:"
@@ -28,14 +29,17 @@ help_msg(){
 }
 
 to_upper(){
+    # Convert input variable to uppercase and store it in OUTPUT
     OUTPUT=$(echo $1 | tr '[:lower:]' '[:upper:]')
 }
 
 to_lower(){
+    # Convert input variable to lowercase and store it in OUTPUT
     OUTPUT=$(echo $1 | tr '[:upper:]' '[:lower:]')
 }
 
 get_args(){
+    #Parse the parameter passed in input
     case "$1" in
         -r|--recursive) RECURSIVE=1;;
         -s|--subdirectories) SUBDIRECTORIES=1;;
@@ -50,6 +54,7 @@ change_name(){
     FILEPATH=""
     if [[ "$INPUT" == *\/* ]];then
         # If the name contains "/" for example folder/subfolder/file
+        # Cut the name in two part, the path and the name of the file
         FILEPATH="$(echo $INPUT | sed 's:/[^/]*$::')/"
         INPUT=$(echo $INPUT | sed 's:.*/::')
     fi
@@ -58,20 +63,27 @@ change_name(){
     else
         to_lower $INPUT
     fi
+    # Reformat file names
     INPUT=$FILEPATH$INPUT
     OUTPUT=$FILEPATH$OUTPUT
 }
 
 main_func(){
-local PREV_DIR=$(pwd)
 while test "x$1" != "x";do 
     if [ -d $1 ]; then
+        # If the file is a directory
         if [ $RECURSIVE -eq 1 ];then
+            # If recursive is active, cd in the directory 
+            # and apply this function to all files int the directory
+            local PREV_DIR=$(pwd)
             cd $1
             main_func $(ls)
             cd $PREV_DIR
+            # Get back to the parent directory
         fi
         if [ $SUBDIRECTORIES -eq 1 ];then
+            # If subdirectories is active, 
+            # change the name of the directory
             INPUT=$1
             change_name
             mv $INPUT $OUTPUT 2>/dev/null
@@ -85,11 +97,13 @@ while test "x$1" != "x";do
 done
 }
 
+# Parse all args one by one
 while test "x$1" != "x";do
     get_args $1
     shift
 done
 
+# Error handling
 if [[ $UPPERCASE -eq 1 && $LOWERCASE -eq 1 ]];then
     echo "ERROR : CAN'T LOWERCASE AND UPPERCASE"
     exit
