@@ -18,7 +18,7 @@ touch folder/subFOlder/file3
 }
 
 reset_test_folder
-echo "Architecture of test :"
+echo "Test architecture :"
 echo -e "├── folder
 │   ├── file1
 │   └── subFOlder
@@ -29,8 +29,10 @@ echo -e "├── folder
 testing(){
 echo -e "${R}Testing :${B} $1${NOCOLOR}"
 $1
-echo "result of ls -R:"
-ls --color=tty -R 
+echo "result of tree:"
+# Uncomment the following line if you can't install tree
+#ls --color=tty -R 
+tree
 reset_test_folder
 echo _______________________________________________________________
 }
