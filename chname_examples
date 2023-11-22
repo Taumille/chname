@@ -44,4 +44,6 @@ testing "./chname -u -s folder/subFOlder"
 testing "./chname -u -r folder file_root"
 testing "./chname -u -s -r folder file_root"
 testing "./chname -u -s -r folder/*"
+testing "./chname -u -l -r file1"
+testing "./chname -u -r file42"
 
