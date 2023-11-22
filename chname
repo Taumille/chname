@@ -88,10 +88,12 @@ while test "x$1" != "x";do
             change_name
             mv $INPUT $OUTPUT 2>/dev/null
         fi
-    else
+    elif [ -f $1 ]; then
         INPUT=$1
         change_name
         mv $INPUT $OUTPUT 2>/dev/null
+    else
+        echo "ERROR : $1 doesn't exist"
     fi
     shift
 done
