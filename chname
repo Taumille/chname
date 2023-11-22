@@ -18,8 +18,8 @@ help_msg(){
     echo "Usage: script_name [OPTIONS] [FILENAMES]"
 
     echo "Options:"
-    echo "  -r, --recursive            Process directories recursively."
-    echo "  -s, --subdirectories       Process subdirectories as well."
+    echo "  -r, --recursive            Process files recursively."
+    echo "  -s, --subdirectories       Process directories as well."
     echo "  -l, --lowercase            Convert filenames to lowercase."
     echo "  -u, --uppercase            Convert filenames to uppercase."
     echo "  -h, --help                 Display this help message."
