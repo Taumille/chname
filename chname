@@ -79,7 +79,7 @@ while test "x$1" != "x";do
             cd $1
             main_func $(ls)
             cd $PREV_DIR
-            # Get back to the parent directory
+            # Get back to the previous directory
         fi
         if [ $SUBDIRECTORIES -eq 1 ];then
             # If subdirectories is active, 
