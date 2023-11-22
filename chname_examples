@@ -29,7 +29,7 @@ echo -e "├── folder
 testing(){
 echo -e "${R}Testing :${B} $1${NOCOLOR}"
 $1
-echo "result of tree:"
+echo -e "\n\nResult of tree:"
 # Uncomment the following line if you can't install tree
 #ls --color=tty -R 
 tree
