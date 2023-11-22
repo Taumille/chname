@@ -108,11 +108,11 @@ done
 # Error handling
 if [[ $UPPERCASE -eq 1 && $LOWERCASE -eq 1 ]];then
     echo "ERROR : CAN'T LOWERCASE AND UPPERCASE"
-    exit
+    exit 1
 fi  
 if [[ $UPPERCASE -eq 0 && $LOWERCASE -eq 0 ]];then
     echo "ERROR : CAN'T DO NOTHING"
-    exit
+    exit 1
 fi  
 
 
