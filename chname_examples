@@ -12,23 +12,33 @@ rm -r $FILETODELETE
 
 touch file_root
 mkdir -p folder/subFOlder
+mkdir -p folder/sub\ FOlder
 touch folder/file1
+touch folder/file\ 5
+touch folder/file\*6
 touch folder/subFOlder/FILE2
 touch folder/subFOlder/file3
+touch folder/subFOlder/fileé4
+touch folder/sub\ FOlder/file7
 }
 
 reset_test_folder
 echo "Test architecture :"
-echo -e "├── folder
-│   ├── file1
-│   └── subFOlder
-│       ├── FILE2
-│       └── file3
-└── file_root\n\n"
+echo -e "├── chname
+├── chname_examples
+├── file_root
+└── folder
+    ├── file1
+    ├── file 5
+    ├── file*6
+    └── subFOlder
+        ├── FILE2
+        ├── file3
+        └── fileé4
+"
 
 testing(){
-echo -e "${R}Testing :${B} $1${NOCOLOR}"
-$1
+echo -e "${R}Testing :${B}"$*" ${NOCOLOR}"
 echo -e "\n\nResult of tree:"
 # Uncomment the following line if you can't install tree
 #ls --color=tty -R 
@@ -37,15 +47,48 @@ reset_test_folder
 echo _______________________________________________________________
 }
 
+./chname -h
 testing "./chname -h"
+
+./chname -u file_root
 testing "./chname -u file_root"
+
+./chname -l folder/subFOlder/FILE2
 testing "./chname -l folder/subFOlder/FILE2"
+
+./chname -u folder/file\ 5
+testing "./chname -u folder/file\ 5"
+
+./chname -u folder/file\*6
+testing "./chname -u folder/file\*6"
+
+./chname -l folder/subFOlder/fileé4
+testing "./chname -l folder/subFOlder/fileé4"
+
+./chname -u -r folder
 testing "./chname -u -r folder"
+
+./chname -u -r -s folder
 testing "./chname -u -r -s folder"
+
+./chname -u -s folder/subFOlder
 testing "./chname -u -s folder/subFOlder"
+
+./chname -u -r folder file_root
 testing "./chname -u -r folder file_root"
+
+./chname -u -s -r folder file_root
 testing "./chname -u -s -r folder file_root"
+
+./chname -u -s -r folder/*
 testing "./chname -u -s -r folder/*"
+
+./chname -u -l -r file1
 testing "./chname -u -l -r file1"
+
+./chname -r file1
+testing "./chname -r file1"
+
+./chname -u -r file42
 testing "./chname -u -r file42"
 
